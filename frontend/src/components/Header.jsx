@@ -1,9 +1,22 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { Link, useLocation } from 'react-router-dom'
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const location = useLocation()
+
+  // Scroll to section (works from any route)
+  const goToSection = (id) => {
+    setIsMobileMenuOpen(false)
+
+    if (location.pathname !== '/') {
+      window.location.href = `/#${id}`
+    } else {
+      document.querySelector(`#${id}`)?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -12,21 +25,6 @@ const Header = () => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  const navItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Events', href: '#events' },
-    { name: 'Contact', href: '#contact' },
-  ]
-
-  const scrollToSection = (href) => {
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-      setIsMobileMenuOpen(false)
-    }
-  }
 
   return (
     <motion.header
@@ -41,7 +39,7 @@ const Header = () => {
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <div className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3">
             <img
               src="/logo.svg"
               alt="ADG Logo"
@@ -51,20 +49,31 @@ const Header = () => {
               <h1 className="text-xl font-bold text-gradient">ADG</h1>
               <p className="text-xs text-gray-500">Innovation & Excellence</p>
             </div>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <button
-                key={item.name}
-                onClick={() => scrollToSection(item.href)}
-                className="text-black hover:text-creme font-medium transition-colors duration-200 relative group"
-              >
-                {item.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-creme transition-all duration-300 group-hover:w-full"></span>
-              </button>
-            ))}
+            {/* Scroll links */}
+            <button onClick={() => goToSection('home')} className="nav-link">
+              Home
+            </button>
+            <button onClick={() => goToSection('about')} className="nav-link">
+              About
+            </button>
+            <button onClick={() => goToSection('events')} className="nav-link">
+              Events
+            </button>
+            <button onClick={() => goToSection('contact')} className="nav-link">
+              Contact
+            </button>
+
+            {/* Page links */}
+            <Link to="/domains" className="nav-link">
+              Domains
+            </Link>
+            <Link to="/board" className="nav-link">
+              Board
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -76,11 +85,9 @@ const Header = () => {
             <svg
               className="w-6 h-6"
               fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+              stroke="currentColor"
               strokeWidth="2"
               viewBox="0 0 24 24"
-              stroke="currentColor"
             >
               {isMobileMenuOpen ? (
                 <path d="M6 18L18 6M6 6l12 12" />
@@ -96,21 +103,55 @@ const Header = () => {
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden py-4 border-t border-gray-200"
+            className="md:hidden py-4 border-t border-gray-200 space-y-2"
           >
-            {navItems.map((item) => (
-              <button
-                key={item.name}
-                onClick={() => scrollToSection(item.href)}
-                className="block w-full text-left px-4 py-2 text-black hover:bg-creme-light hover:text-creme rounded-lg transition-colors"
-              >
-                {item.name}
-              </button>
-            ))}
+            <button onClick={() => goToSection('home')} className="mobile-link">
+              Home
+            </button>
+            <button onClick={() => goToSection('about')} className="mobile-link">
+              About
+            </button>
+            <button onClick={() => goToSection('events')} className="mobile-link">
+              Events
+            </button>
+            <button onClick={() => goToSection('contact')} className="mobile-link">
+              Contact
+            </button>
+
+            <Link to="/domains" className="mobile-link" onClick={() => setIsMobileMenuOpen(false)}>
+              Domains
+            </Link>
+            <Link to="/board" className="mobile-link" onClick={() => setIsMobileMenuOpen(false)}>
+              Board
+            </Link>
           </motion.div>
         )}
       </nav>
+
+      {/* Reusable styles */}
+      <style>{`
+        .nav-link {
+          color: black;
+          font-weight: 500;
+          position: relative;
+          transition: color 0.2s;
+        }
+        .nav-link:hover {
+          color: #c2a97e;
+        }
+        .mobile-link {
+          display: block;
+          width: 100%;
+          padding: 0.5rem 1rem;
+          text-align: left;
+          color: black;
+          border-radius: 0.5rem;
+        }
+        .mobile-link:hover {
+          background: #f5f0e8;
+          color: #c2a97e;
+        }
+      `}</style>
     </motion.header>
   )
 }

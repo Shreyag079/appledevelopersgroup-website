@@ -36,7 +36,7 @@ const About = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="text-gradient">About Us</span>
           </h2>
-          <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-700 max-w-3xl mx-auto leading-relaxed">
             We are a dynamic technical club dedicated to fostering innovation, 
             collaboration, and excellence in technology. We express a primary agenda to educate people about the Apple ecosystem and train them with the Swift language. Besides the Swift platform, we also feel pride in recognizing our highly skilled Android, ML, and Web-Dev coders. We strive to offer the best-in-class mentorship for those who have a zeal to succeed and a passion to develop.
           </p>
